@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Make your Gradient</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sora;
+    }
+
+    .main_page {
+      width: 100%;
+      height: 100vh;
+    }
+
+    .linear_gradinet {
+      width: 100%;
+      height: 50vh;
+      margin-bottom: 20px;
+    }
+
+    .list_items {
+      display: flex;
+      width: 80%;
+      margin: auto;
+      justify-content: space-evenly;
+      gap: 40px;
+      padding: 10px;
+    }
+
+
+    input[type="color"] {
+      width: 32px;
+      height: 32px;
+      margin-right: 15px;
+      border-radius: 50%;
+      outline: 2px solid rgb(160, 160, 160);
+      outline-offset: 2px;
+      cursor: pointer;
+      border: none;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: none;
+      border-radius: 50%;
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 2px;
+    }
+
+    .select_gradient {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .list_items h4 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .select_gradient label {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      text-transform: capitalize;
+      cursor: pointer;
+    }
+
+    .select_gradient label input {
+      margin-right: 5px;
+      transform: scale(.8);
+    }
+
+    .gradient_rotation .icons {
+      list-style: none;
+    }
+
+    .icons ion-icon,
+    .radial ion-icon {
+      font-size: 40px;
+      color: rgb(26, 26, 26);
+      font-weight: 600;
+      transform: scale(.9);
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .active {
+      outline: 3px solid rgb(255, 197, 88);
+      outline-offset: 2px;
+    }
+
+    .icons ion-icon:not(.active):hover {
+      outline: 3px solid rgb(255, 238, 208);
+      outline-offset: 2px;
+    }
+
+    .icons .top,
+    .bottom {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .icons .bottom li {
+      transform: rotate(calc(var(--i)*45deg));
+    }
+
+    .copy_text {
+      width: 65%;
+      margin: 30px auto;
+    }
+
+    .copy_text button {
+      padding: 10px 50px;
+      margin-bottom: 30px;
+      font-size: 14px;
+      border-radius: 3px;
+      border: none;
+      color: #fff;
+      background-color: rgb(24, 24, 24);
+      background-image: linear-gradient(to left, rgb(14, 14, 14), rgb(14, 14, 14));
+      cursor: pointer;
+      background-size: 1px 100%;
+      background-repeat: no-repeat;
+      transition: all .3s linear;
+    }
+
+    .copy_text button:hover {
+      outline: 3px solid rgb(255, 183, 50);
+      outline-offset: 2px;
+      background-size: 100% 100%;
+    }
+
+    .radial ul {
+      display: flex;
+      list-style: none;
+    }
+
+    @media screen and (max-width:500px) {
+      .list_items {
+        flex-direction: column;
+      }
+
+      .copy_text {
+        width: 75%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main_page" x-data="{
+   first_color:'#4158D0',
+   second_color:'#C850C0',
+   third_color:'#FFCC70',
+   gradient_type:'linear-gradient',
+   from:'to right',
+   ch:false,
+   background_gradient() {return 'background-image:'+this.gradient_type+'('+this.from+','+this.first_color+','+this.second_color+','+ this.third_color+')'},
+   radial_gradient() {return 'background-image:'+this.gradient_type+'('+this.from+','+this.first_color+','+this.second_color+')'},
+   conic_gradient(){ return 'background-image:'+this.gradient_type+'('+this.first_color+','+this.second_color+')'}
+  }">
+    <div class="linear_gradinet" x-ref="bg"
+      :style="gradient_type=='linear-gradient'?background_gradient:gradient_type=='radial-gradient'?radial_gradient:''">
+    </div>
+
+    <div class="list_items">
+      <div class="select_color">
+        <h4>Select Color</h4>
+        <input type="color" x-model="first_color">
+        <input type="color" x-model="second_color">
+        <input type="color" x-model="third_color" x-show="gradient_type=='linear-gradient'">
+      </div>
+      <div class="select_gradient">
+        <h4>Select your gradient type</h4>
+        <label for="a" x-on:click="from='to left'">
+          <input type="radio" name="gradinet" id="a"
+            x-on:click="gradient_type='linear-gradient'" checked />linear gradinet</label>
+        <label for="b" x-on:click="from='circle'"><input type="radio" name="gradinet" id="b"
+            x-on:click="gradient_type='radial-gradient'" />Radial
+          gradinet</label>
+
+      </div>
+
+      <div class="gradient_rotation">
+        <div x-show="gradient_type==='linear-gradient'">
+          <h4>Rotate your gradient</h4>
+          <ul class="icons">
+            <div class="top">
+              <li x-on:click="from='to left'"><ion-icon :class="from=='to left'? 'active':''"
+                  name="arrow-back-circle"></ion-icon></li>
+              <li x-on:click="from='to right'"><ion-icon :class="from=='to right'? 'active':''"
+                  name="arrow-forward-circle"></ion-icon></li>
+              <li x-on:click="from='to top'"><ion-icon :class="from=='to top'? 'active':''"
+                  name="arrow-up-circle"></ion-icon></li>
+              <li x-on:click="from='to bottom'"><ion-icon :class="from=='to bottom'? 'active':''"
+                  name="arrow-down-circle"></ion-icon></li>
+            </div>
+            <div class="bottom">
+              <li style="--i:1" x-on:click="from='to left top'"><ion-icon :class="from=='to left top'? 'active':''"
+                  name="arrow-back-circle"></ion-icon></li>
+              <li style="--i:3" x-on:click="from='to left bottom'"><ion-icon
+                  :class="from=='to left bottom'? 'active':''" name="arrow-forward-circle"></ion-icon>
+              </li>
+              <li style="--i:1" x-on:click="from='to right top'"><ion-icon :class="from=='to right top'? 'active':''"
+                  name="arrow-up-circle"></ion-icon></li>
+              <li style="--i:-1" x-on:click="from='to right bottom'"><ion-icon
+                  :class="from=='to right bottom'? 'active':''" name="arrow-down-circle"></ion-icon></li>
+            </div>
+          </ul>
+        </div>
+        <div class="radial" x-show="gradient_type==='radial-gradient'">
+          <h4>Choose your gradient</h4>
+          <ul>
+            <li x-on:click="from='circle'"><ion-icon :class="from=='circle'? 'active':''"
+                name="disc"></ion-icon></li>
+            <li x-on:click="from='circle at left'"><ion-icon :class="from=='circle at left'? 'active':''"
+                name="arrow-back-circle"></ion-icon></li>
+            <li x-on:click="from='circle at right'"><ion-icon :class="from=='circle at right'? 'active':''"
+                name="arrow-forward-circle"></ion-icon></li>
+            <li x-on:click="from='circle at top'"><ion-icon :class="from=='circle at top'? 'active':''"
+                name="arrow-up-circle"></ion-icon></li>
+            <li x-on:click="from='circle at bottom'"><ion-icon :class="from=='circle at bottom'? 'active':''"
+                name="arrow-down-circle"></ion-icon></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    <div class="copy_text">
+      <button
+        x-on:click="navigator.clipboard.writeText($refs.bg.style.backgroundImage), alert('css has been copied')">Copy
+        css</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/alpinejs" defer></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+</body>
+</html>
